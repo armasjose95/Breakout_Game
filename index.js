@@ -1,6 +1,10 @@
 const grid = document.querySelector('.grid') //looking for class of grid. Storing elment as grid.
 const blockWidth = 100
 const blockHeight = 20
+const boardWidth = 560 //lenght of width we created in css
+
+const userStart = [230,10] // users will always start here
+let currentPosition = userStart // need to move user left and right and need to track this
 
 //create block individual
 class block{
@@ -55,3 +59,40 @@ function addBlocks() {
 addBlocks()
 
 
+//add user
+const user = document.createElement('div') //create a div
+user.classList.add('user')
+drawUser()
+grid.appendChild(user)
+
+//draw the user
+function drawUser() {
+    user.style.left = currentPosition[0] + 'px' //get x axis
+    user.style.bottom = currentPosition[1] + 'px' //get y axis  
+}
+
+//move user
+function moveUser(e) { // pass through an event
+    switch(e.key) { // if it equals the case then you execute the code
+        case 'ArrowLeft':
+            //stopping user from leaving square.
+            if (currentPosition[0] > 0) { //as long as x-axis of our user is larger than 0, then we execute
+                currentPosition[0] -= 10 //take away from our x axis and move x position
+                drawUser() //redraw the user
+            }
+            break;
+        case 'ArrowRight':
+            /* -blockWidth because it goes over right side of box because it stops at left corner of the box is over
+            which pulls entire block outside of box */
+            if (currentPosition[0] < boardWidth - blockWidth) { 
+                currentPosition[0] += 10
+                drawUser() //redraw the user
+            }
+            break;
+    }
+}
+
+/*listening out to anytime I press any key on the keyboard and going to invoke movesUser function
+and then see if the ksy is our left and if it is we're going to move the x axis of current position
+*/
+document.addEventListener('keydown', moveUser) 
