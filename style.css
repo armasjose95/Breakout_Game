@@ -3,6 +3,7 @@
   height: 300px;
   border: solid black 1px;
   position: absolute; /* Position absolute needed with everything if you want to start assigning it left & bottom values.*/
+  margin-top: 80px;
 }
 
 .block {

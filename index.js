@@ -1,7 +1,12 @@
 const grid = document.querySelector('.grid') //looking for class of grid. Storing elment as grid.
 const blockWidth = 100
 const blockHeight = 20
+const ballDiameter = 20 //w&h of 20 we gave ball in css
 const boardWidth = 560 //lenght of width we created in css
+const boardHeight = 300
+let timerId
+let xDirection = 2
+let yDirection = 2
 
 const userStart = [230,10] // users will always start here
 let currentPosition = userStart // need to move user left and right and need to track this
@@ -74,6 +79,14 @@ function drawUser() {
     user.style.bottom = currentPosition[1] + 'px' //get y axis  
 }
 
+
+//draw the ball
+function drawBall() {
+    ball.style.left = ballCurrentPosition[0] + 'px'
+    ball.style.bottom = ballCurrentPosition[1] + 'px'
+}
+
+
 //move user
 function moveUser(e) { // pass through an event
     switch(e.key) { // if it equals the case then you execute the code
@@ -105,6 +118,38 @@ document.addEventListener('keydown', moveUser)
 //add ball
 const ball = document.createElement('div')
 ball.classList.add('ball')
-ball.style.left = ballCurrentPosition[0] + 'px'
-ball.style.bottom = ballCurrentPosition[1] + 'px'
+drawBall()
 grid.appendChild(ball) //putting ball inside of the parent:grid
+
+//moving the ball
+function moveBall() { //want ball to move by adding an x and y axis
+    ballCurrentPosition[0] += xDirection //moves our ball
+    ballCurrentPosition[1] += yDirection
+    drawBall()
+    checkForCollisions() //every 30 milliseconds we want to check for a collision
+}
+
+//Need to clear timerId when we want the ball to stop. Stop by getting timerID & passing it through clear interval.
+timerId = setInterval(moveBall, 30) //30 milliseconds
+
+// check for collisions
+function checkForCollisions() {
+    //check for wall collisions
+    //if larger we know it's off the grid & we need to change direction
+    //account for ball width itself as ball width and height are the same
+    if (ballCurrentPosition[0] >= (boardWidth - ballDiameter || ballCurrentPosition[1] >= (boardHeight - ballDiameter))) {
+        changeDirection()
+    } 
+}
+
+
+//currently we know ball is moving +2 x&Y and need to change these values
+function changeDirection() {
+    //if xDirection on collision === 2 & yDirection === 2 on collison
+    //essentially ball is moving to the top right corner of the grid, we want to change the direction
+    if (xDirection === 2 && yDirection === 2) { 
+        yDirection = -2 // to make sure ball has proper phsyics collison
+        return
+    }
+    //if 
+}
