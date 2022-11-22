@@ -6,6 +6,9 @@ const boardWidth = 560 //lenght of width we created in css
 const userStart = [230,10] // users will always start here
 let currentPosition = userStart // need to move user left and right and need to track this
 
+const ballStart = [270,40]
+let ballCurrentPosition = ballStart
+
 //create block individual
 class block{
     //Using x&y axis I can decipher all 4 pts of my block & where they are on my grid using width & height of the block.
@@ -96,3 +99,12 @@ function moveUser(e) { // pass through an event
 and then see if the ksy is our left and if it is we're going to move the x axis of current position
 */
 document.addEventListener('keydown', moveUser) 
+
+
+
+//add ball
+const ball = document.createElement('div')
+ball.classList.add('ball')
+ball.style.left = ballCurrentPosition[0] + 'px'
+ball.style.bottom = ballCurrentPosition[1] + 'px'
+grid.appendChild(ball) //putting ball inside of the parent:grid

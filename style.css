@@ -2,7 +2,7 @@
   width: 560px;
   height: 300px;
   border: solid black 1px;
-  position: absolute;
+  position: absolute; /* Position absolute needed with everything if you want to start assigning it left & bottom values.*/
 }
 
 .block {
@@ -16,5 +16,13 @@
   width: 100px;
   height: 20px;
   background-color: purple;
+  position: absolute;
+}
+
+.ball {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: red;
   position: absolute;
 }
