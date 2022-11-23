@@ -1,12 +1,14 @@
 const grid = document.querySelector('.grid') //looking for class of grid. Storing elment as grid.
+const scoreDisplay = document.querySelector('#score')
 const blockWidth = 100
 const blockHeight = 20
 const ballDiameter = 20 //w&h of 20 we gave ball in css
 const boardWidth = 560 //lenght of width we created in css
 const boardHeight = 300
 let timerId
-let xDirection = 2
+let xDirection = -2
 let yDirection = 2
+let score = 0
 
 const userStart = [230,10] // users will always start here
 let currentPosition = userStart // need to move user left and right and need to track this
@@ -134,12 +136,35 @@ timerId = setInterval(moveBall, 30) //30 milliseconds
 
 // check for collisions
 function checkForCollisions() {
+    //check for block collisions
+    for (let i = 0; i < blocks.length; i++) {
+        if ( // check if ball is in between the block's bttm left x-axis & bttm right x-axis & in the height(means a collision)
+            (ballCurrentPosition[0] > blocks[i].bottomLeft[0] && ballCurrentPosition[0] < blocks[i].bottomRight[0]) &&
+            ((ballCurrentPosition[1] + ballDiameter) > blocks[i].bottomLeft[1] && ballCurrentPosition[1] < blocks[i].topLeft[1])
+        ) {
+            const allBlocks = Array.from(document.querySelectorAll('.block'))
+            allBlocks[i].classList.remove('block') //visually won't see the block now
+            blocks.splice(i, 1) //remove specefic block from our blocks array by using splice
+            changeDirection()
+            score++
+            scoreDisplay.innerHTML = score
+        }
+    }
     //check for wall collisions
     //if larger we know it's off the grid & we need to change direction
     //account for ball width itself as ball width and height are the same
-    if (ballCurrentPosition[0] >= (boardWidth - ballDiameter || ballCurrentPosition[1] >= (boardHeight - ballDiameter))) {
+    if (ballCurrentPosition[0] >= (boardWidth - ballDiameter) || 
+        ballCurrentPosition[1] >= (boardHeight - ballDiameter) ||
+        ballCurrentPosition[0] <= 0  //goes off l hand side of board, change direction b4 it happens
+        ) {
         changeDirection()
     } 
+    //check for game over
+    if (ballCurrentPosition[1] <= 0) { //goes off bottom of board, change direction b4 it happens
+        clearInterval(timerId) //want to stop it
+        scoreDisplay.innerHTML = 'You lose!'
+        document.removeEventListener('keydown', moveUser) //so we can't move the user anymore
+    }
 }
 
 
@@ -151,5 +176,17 @@ function changeDirection() {
         yDirection = -2 // to make sure ball has proper phsyics collison
         return
     }
-    //if 
+    if (xDirection === 2 && yDirection === -2) {
+        xDirection = -2
+        return
+    }
+    if (xDirection === -2 && yDirection === -2) {
+        yDirection = 2
+        return
+    }
+    if (xDirection === -2 && yDirection === 2) {
+        xDirection = 2
+        return
+    }
 }
+
