@@ -148,6 +148,13 @@ function checkForCollisions() {
             changeDirection()
             score++
             scoreDisplay.innerHTML = score
+
+            //check for a winner!
+            if (blocks.length === 0) {
+                scoreDisplay.innerHTML = 'YOU WIN!'
+                clearInterval(timerId)
+                document.removeEventListener('keydown', moveUser)
+            }
         }
     }
     //check for wall collisions
@@ -159,6 +166,17 @@ function checkForCollisions() {
         ) {
         changeDirection()
     } 
+
+    //check for user collisions
+    //checking if ball is in between two sides of our user
+    if (
+         (ballCurrentPosition[0] > currentPosition[0] && ballCurrentPosition[0] < currentPosition[0] + blockWidth) &&
+        (ballCurrentPosition[1] > currentPosition[1] && ballCurrentPosition[1] < currentPosition[1] + blockHeight)
+    ) {
+        changeDirection()
+    }
+
+
     //check for game over
     if (ballCurrentPosition[1] <= 0) { //goes off bottom of board, change direction b4 it happens
         clearInterval(timerId) //want to stop it
